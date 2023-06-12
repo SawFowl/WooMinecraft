@@ -5,6 +5,7 @@ WordPress side of things, we allow you to specify commands for product variation
 ![WooMinecraft Logo](https://raw.githubusercontent.com/WooMinecraft/WooMinecraft/main/src/main/resources/wmc-logo.jpg)
 
 ### WooMinecraft for Sponge servers. API 8+
+####  ***[LocaleAPI](https://ore.spongepowered.org/Semenkovsky_Ivan/LocaleAPI) - required.***
 
 ## Config
 Your config should look like the below section.
