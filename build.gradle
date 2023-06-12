@@ -1,0 +1,96 @@
+plugins {
+	id("java")
+	id("java-library")
+	id("maven-publish")
+	id("org.spongepowered.gradle.plugin") version "2.0.2"
+	id("eclipse")
+}
+
+group = "com.plugish.woominecraft"
+version = "${major}.${minor}.${patch}-${api}-${suffix}"
+
+java {
+	sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+repositories {
+	mavenCentral()
+	maven {
+		name = "Sponge"
+		url = "https://repo.spongepowered.org/repository/maven-public"
+	}
+	maven { 
+		name = "JitPack"
+		url 'https://jitpack.io' 
+	}
+}
+
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}
+
+dependencies {
+	implementation "org.spongepowered:spongeapi:8.0.0"
+	implementation "com.github.SawFowl:LocaleAPI:2.6.0"
+	implementation 'com.squareup.okhttp3:okhttp:3.13.1'
+	//implementation fileTree(dir: 'libs', include: '*.jar')
+}
+
+sponge {
+	apiVersion("8.0.0")
+	loader {
+		name("java_plain")
+		version("1.0")
+	}
+	license("GPL-3.0")
+	plugin("woominecraft") {
+		displayName(project.name.capitalize())
+		version("${project.version}")
+		entrypoint("${project.group}.${rootProject.name}")
+		description("WooMinecraft")
+		contributor("SawFowl") {
+			description("Fork Developer")
+		}
+		contributor("Jerry Wood") {
+			description("Author")
+		}
+		dependency("spongeapi") {
+			optional(false)
+			loadOrder("after")
+			version("8.0.0")
+		}
+		dependency("localeapi") {
+			optional(true)
+			loadOrder("after")
+			version("2.6.0")
+		}
+	}
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+configurations {
+	doc {
+		transitive false
+	}
+}
+
+javadoc {
+	options.encoding = 'UTF-8'
+	source configurations.doc.collect { zipTree(it) }
+	include '**/*.java'
+	options.addStringOption('Xdoclint:none', '-quiet')
+}
