@@ -4,15 +4,11 @@
 WordPress side of things, we allow you to specify commands for product variations, general product commands, and resending of donations at any time.   
 ![WooMinecraft Logo](https://raw.githubusercontent.com/WooMinecraft/WooMinecraft/main/src/main/resources/wmc-logo.jpg)
 
+### WooMinecraft for Sponge servers. API 8+
+
 ## Config
 Your config should look like the below section.
 ```
-# Set this to the desired language file you wish to load.
-#
-# If your l10n is not available but one is that you know how to speak,consider
-# contributing to this plugin at https://github.com/WooMinecraft/WooMinecraft/
-lang: "en"
-
 # This is how often, in seconds, the server will contact your WordPress installation
 # to see if there are donations that need made.
 update_interval: 1500
@@ -42,8 +38,10 @@ key: ""
 
 # Allowed worlds the player needs to be in to run the commands.
 # Disabled by default!
-#whitelist-worlds:
-#  - world
+whitelist-worlds:
+    enable: false
+    list:
+    - minecraft:overworld
 
 # Set to true in order to toggle debug information
 debug: false
