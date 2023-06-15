@@ -70,14 +70,14 @@ You'll need the WordPress plugin for this MC Plugin to work - you can [get it he
 ## Changelog
 
 ## 1.4.7
-Changed the type of the main config of the plugin to HOCON.
-A link for interacting with the Mojang API has been added to the configuration. This is designed so that you can specify a different link in case of any changes from Mojang's side.
+* Changed the type of the main config of the plugin to HOCON.
+* A link for interacting with the Mojang API has been added to the configuration. This is designed so that you can specify a different link in case of any changes from Mojang's side.
 
 ## 1.4.6
-Migration to SpongeAPI.
-Addition of localizationы.
-Now you can use all localizations at the same time.
-Added Russian localization.
+* Migration to SpongeAPI.
+* Addition of localizationы.
+* Now you can use all localizations at the same time.
+* Added Russian localization.
 
 ## 1.4.5
 * Hotfix for [274](https://github.com/WooMinecraft/WooMinecraft/issues/274)
