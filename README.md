@@ -75,7 +75,7 @@ You'll need the WordPress plugin for this MC Plugin to work - you can [get it he
 
 ## 1.4.6
 * Migration to SpongeAPI.
-* Addition of localizationы.
+* Addition of localizations.
 * Now you can use all localizations at the same time.
 * Added Russian localization.
 
