@@ -9,43 +9,40 @@ WordPress side of things, we allow you to specify commands for product variation
 
 ## Config
 Your config should look like the below section.
-```
-# This is how often, in seconds, the server will contact your WordPress installation
-# to see if there are donations that need made.
-update_interval: 1500
-
-# You must set this to your WordPress site URL.  If you installed WordPress in a
-# subdirectory, it should point there.
-url: "http://playground.dev"
-
-# If you are having issues with REST, or have disabled pretty permalinks. Set this to false.
-# Doing so will use the old /index.php?rest_route=/wmc/v1/server/ base
-# Setting this to false will also allow you to set the restBasePath value if you have altered your
-# installation in any way.
-prettyPermalinks: true
-
-# If your REST API has a custom path base, input it here. 
-# NOTE: This is only loaded if prettyPermalinks is set to false.
-# Known good URL bases.
-# - /wp-json/wmc/v1/server/
-# - /index.php?rest_route=/wmc/v1/server/
-restBasePath: ""
-
+```hocon
+# Set to true in order to toggle debug information
+Debug=false
 # This must match the WordPress key in your admin panel for WooMinecraft
 # This is a key that YOU set, both needing to be identical in the admin panel
 # and in this config file
 # For security purposes, you MUST NOT leave this empty.
-key: ""
-
+Key=""
+MojangURL="https://api.mojang.com/users/profiles/minecraft/"
+# If you are having issues with REST, or have disabled pretty permalinks. Set this to false.
+# Doing so will use the old /index.php?rest_route=/wmc/v1/server/ base
+# Setting this to false will also allow you to set the restBasePath value if you have altered your
+# installation in any way.
+PrettyPermalinks=true
+# If your REST API has a custom path base, input it here.
+# NOTE: This is only loaded if prettyPermalinks is set to false.
+# Known good URL bases.
+# - /wp-json/wmc/v1/server/
+# - /index.php?rest_route=/wmc/v1/server/
+RestBasePath=""
+# You must set this to your WordPress site URL.  If you installed WordPress in a
+# subdirectory, it should point there.
+URL="http://playground.dev"
+# This is how often, in seconds, the server will contact your WordPress installation
+# to see if there are donations that need made.
+UpdateInterval=1500
 # Allowed worlds the player needs to be in to run the commands.
 # Disabled by default!
-whitelist-worlds:
-    enable: false
-    list:
-    - minecraft:overworld
-
-# Set to true in order to toggle debug information
-debug: false
+WhitelistWorlds {
+    Enable=false
+    List=[
+        "minecraft:overworld"
+    ]
+}
 ```
 
 ## How does it work?
