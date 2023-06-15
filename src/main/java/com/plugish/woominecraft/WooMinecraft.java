@@ -92,8 +92,16 @@ public final class WooMinecraft {
 		return localeService.getOrDefaultLocale("woominecraft", locale).getString(path);
 	}
 
+	public String getLocalizedLogString(Locale locale, Object path) {
+		return localeService.getOrDefaultLocale("woominecraft", locale).getString("log", path);
+	}
+
 	public Component getLocalizedText(Locale locale, Object... path) {
 		return localeService.getOrDefaultLocale("woominecraft", locale).getComponent(false, path);
+	}
+
+	public Component getLocalizedGeneralText(Locale locale, Object path) {
+		return localeService.getOrDefaultLocale("woominecraft", locale).getComponent(false, "general", path);
 	}
 
 	public Config getConfig() {
@@ -143,13 +151,13 @@ public final class WooMinecraft {
 		localeService.saveAssetLocales("woominecraft");
 
 		// Log when plugin is initialized.
-		getLogger().info(getLocalizedString(getSystemOrDefaultLocale(), "log", "com_init"));
+		getLogger().info(getLocalizedLogString(getSystemOrDefaultLocale(), "com_init"));
 
 		// Setup the scheduler
 		Sponge.asyncScheduler().submit(Task.builder().plugin(pluginContainer).delay(config.get().getUpdateInterval(), TimeUnit.SECONDS).interval(config.get().getUpdateInterval(), TimeUnit.SECONDS).execute(new SpongeRunner(instance)).build());
 		
 		// Log when plugin is fully enabled ( setup complete ).
-		getLogger().info(getLocalizedString(getSystemOrDefaultLocale(), "log", "enabled"));
+		getLogger().info(getLocalizedLogString(getSystemOrDefaultLocale(), "enabled"));
 	}
 
 	@Listener
@@ -159,7 +167,7 @@ public final class WooMinecraft {
 
 	@Listener
 	public void onDisable(StoppedGameEvent event) {
-		getLogger().info(getLocalizedString(getSystemOrDefaultLocale(), "log", "disabled"));
+		getLogger().info(getLocalizedLogString(getSystemOrDefaultLocale(), "disabled"));
 	}
 
 	/**
@@ -173,11 +181,11 @@ public final class WooMinecraft {
 	private void validateConfig() throws Exception {
 
 		if ( 1 > this.getConfig().getUrl().length() ) {
-			throw new Exception( "Server URL is empty, check config." );
+			throw new Exception(getLocalizedLogString(getSystemOrDefaultLocale(), "empty_url"));
 		} else if ( this.getConfig().getUrl().equals( "http://playground.dev" ) ) {
-			throw new Exception( "URL is still the default URL, check config." );
+			throw new Exception(getLocalizedLogString(getSystemOrDefaultLocale(), "default_url"));
 		} else if ( 1 > this.getConfig().getKey().length() ) {
-			throw new Exception( "Server Key is empty, this is insecure, check config." );
+			throw new Exception(getLocalizedLogString(getSystemOrDefaultLocale(), "empty_key"));
 		}
 	}
 
@@ -200,7 +208,7 @@ public final class WooMinecraft {
 			}
 		}
 
-		debug_log( "Checking base URL: " + baseUrl );
+		debug_log( getLocalizedLogString(getSystemOrDefaultLocale(), "check_base_url") + baseUrl );
 		return new URL( baseUrl + getConfig().getKey() );
 	}
 
@@ -218,11 +226,11 @@ public final class WooMinecraft {
 
 		// Contact the server.
 		String pendingOrders = getPendingOrders();
-		debug_log( "Logging website reply" + NL + pendingOrders.substring( 0, Math.min(pendingOrders.length(), 64) ) + "..." );
+		debug_log( getLocalizedLogString(getSystemOrDefaultLocale(), "site_reply") + NL + pendingOrders.substring( 0, Math.min(pendingOrders.length(), 64) ) + "..." );
 
 		// Server returned an empty response, bail here.
 		if ( pendingOrders.isEmpty() ) {
-			debug_log( "Pending orders is empty completely", 2 );
+			debug_log( getLocalizedLogString(getSystemOrDefaultLocale(), "empty_pending_orders"), 2 );
 			return false;
 		}
 
@@ -234,12 +242,12 @@ public final class WooMinecraft {
 		// Validate we can indeed process what we need to.
 		if ( wmcPojo.getData() != null ) {
 			// We have an error, so we need to bail.
-			wmc_log( "Code:" + wmcPojo.getCode(), 3 );
+			wmc_log( getLocalizedLogString(getSystemOrDefaultLocale(), "code") + wmcPojo.getCode(), 3 );
 			throw new Exception( wmcPojo.getMessage() );
 		}
 
 		if ( orderList == null || orderList.isEmpty() ) {
-			wmc_log( "No orders to process.", 2 );
+			wmc_log( getLocalizedLogString(getSystemOrDefaultLocale(), "no_orders"), 2 );
 			return false;
 		}
 
@@ -248,7 +256,7 @@ public final class WooMinecraft {
 		for ( Order order : orderList ) {
 			Optional<ServerPlayer> optPlayer = Sponge.server().player(order.getPlayer());
 			if (!optPlayer.isPresent()) {
-				debug_log( "Player was null for an order", 2 );
+				debug_log( getLocalizedLogString(getSystemOrDefaultLocale(), "player_not_present"), 2 );
 				continue;
 			}
 			ServerPlayer player = optPlayer.get();
@@ -257,7 +265,7 @@ public final class WooMinecraft {
 				List<String> whitelistWorlds = getConfig().getWhitelistWorlds().getList();
 				String playerWorld = player.world().key().asString();
 				if (!whitelistWorlds.contains(playerWorld)) {
-					wmc_log( "Player " + player.name() + " was in world " + playerWorld + " which is not in the white-list, no commands were ran." );
+					wmc_log( getLocalizedLogString(getSystemOrDefaultLocale(), "unauthorized_world").replace("%player%", player.name()).replace("%world%", playerWorld) );
 					continue;
 				}
 			}
@@ -266,7 +274,7 @@ public final class WooMinecraft {
 			for ( String command : order.getCommands() ) {
 				//Auth player against Mojang api
 				if ( ! isPaidUser( player ) ) {
-					debug_log( "User is not a paid player " + player.name() );
+					debug_log( getLocalizedLogString(getSystemOrDefaultLocale(), "not_paid_user ").replace("%user%", player.name()) );
 					return false;
 				}
 
@@ -275,9 +283,9 @@ public final class WooMinecraft {
 				});
 			}
 
-			debug_log( "Adding item to list - " + order.getOrderId() );
+			debug_log( getLocalizedLogString(getSystemOrDefaultLocale(), "add_item") + order.getOrderId() );
 			processedOrders.add( order.getOrderId() );
-			debug_log( "Processed length is " + processedOrders.size() );
+			debug_log( getLocalizedLogString(getSystemOrDefaultLocale(), "processed_length") + processedOrders.size() );
 		}
 
 		// If it's empty, we skip it.
@@ -312,13 +320,13 @@ public final class WooMinecraft {
 
 		// If the body is empty we can do nothing.
 		if ( null == response.body() ) {
-			throw new Exception( "Received empty response from your server, check connections." );
+			throw new Exception( getLocalizedLogString(getSystemOrDefaultLocale(), "empty_response") );
 		}
 
 		// Get the JSON reply from the endpoint.
 		WMCPojo wmcPojo = gson.fromJson( response.body().string(), WMCPojo.class );
 		if ( null != wmcPojo.getCode() ) {
-			wmc_log( "Received error when trying to send post data:" + wmcPojo.getCode(), 3 );
+			wmc_log( getLocalizedLogString(getSystemOrDefaultLocale(), "received_error_post") + wmcPojo.getCode(), 3 );
 			throw new Exception( wmcPojo.getMessage() );
 		}
 
@@ -439,12 +447,12 @@ public final class WooMinecraft {
 
 		// Check if server is in online mode.
 		if (onlineMode) {
-			wmc_log( "Server is in online mode.", 3 );
+			wmc_log( getLocalizedLogString(getSystemOrDefaultLocale(), "online_mode"), 3 );
 			return true;
 		}
 
 		if (!proxy) {
-			wmc_log( "Server in offline Mode", 3 );
+			wmc_log( getLocalizedLogString(getSystemOrDefaultLocale(), "offline_mode"), 3 );
 			return false;
 		}
 
@@ -453,17 +461,16 @@ public final class WooMinecraft {
 		if (PlayersMap.toString().contains( playerKeyBase ) ) {
 			boolean valid = PlayersMap.contains( validPlayerKey );
 			if (!valid) {
-				if(player.isOnline()) player.sendMessage(Component.text("Mojang Auth: Please Speak with a admin about your purchase"));
-				wmc_log("Offline mode not supported", 3);
+				if(player.isOnline()) player.sendMessage(getLocalizedGeneralText(player.locale(), "speak_with_admin"));
+				wmc_log(getLocalizedLogString(getSystemOrDefaultLocale(), "offline_mode_not_support"), 3);
 			}
 
 			return valid;
 		}
 
-		debug_log( "Player was not in the key set " + NL + PlayersMap.toString() );
+		debug_log( getLocalizedLogString(getSystemOrDefaultLocale(), "not_in_the_key_set") + NL + PlayersMap.toString() );
 
 		try {
-			// Посмотреть pro.gravit.launcher.request.uuid.ProfileByUsernameRequest
 			URL mojangUrl = new URL("https://api.mojang.com/users/profiles/minecraft/" +  playerName);
 			InputStream inputStream = mojangUrl.openStream();
 			@SuppressWarnings("resource")
@@ -471,7 +478,7 @@ public final class WooMinecraft {
 			String apiResponse = scanner.next();
 
 			debug_log(
-				"Logging stream data:" + NL +
+				getLocalizedLogString(getSystemOrDefaultLocale(), "stream_data") + NL +
 				inputStream.toString() + NL +
 				apiResponse + NL +
 				playerName + NL +
@@ -480,25 +487,25 @@ public final class WooMinecraft {
 
 			if ( ! apiResponse.contains( playerName ) ) {
 				PlayersMap.add( invalidPlayerKey );
-				throw new IOException("Mojang Auth: PlayerName doesn't exist");
+				throw new IOException(getLocalizedLogString(getSystemOrDefaultLocale(), "name_not_exist"));
 			}
 
 			if ( ! apiResponse.contains( playerUUID ) ) {
 				//if Username exists but is using the offline uuid(doesn't match mojang records) throw IOException and add player to the list as cracked
 				PlayersMap.add( invalidPlayerKey );
-				throw new IOException("Mojang Auth: PlayerName doesn't match uuid for account");
+				throw new IOException(getLocalizedLogString(getSystemOrDefaultLocale(), "name_not_match_uuid"));
 			}
 
 			PlayersMap.add( validPlayerKey );
 			debug_log( PlayersMap.toString() );
 			return true;
 		} catch ( MalformedURLException urlException ) {
-			debug_log("Malformed URL: " + urlException.getMessage(), 3 );
-			if(player.isOnline()) player.sendMessage(Component.text("Mojang API Error: Please try again later or contact an admin about your purchase."));
+			debug_log(getLocalizedLogString(getSystemOrDefaultLocale(), "malformed_url") + urlException.getMessage(), 3 );
+			if(player.isOnline()) player.sendMessage(getLocalizedGeneralText(player.locale(), "mojang_api_error"));
 		} catch ( IOException e ) {
-			debug_log( "Map is " + PlayersMap.toString() );
-			debug_log( "Message when getting URL data " + e.getMessage(), 3 );
-			if(player.isOnline()) player.sendMessage(Component.text("Mojang Auth: Please Speak with a admin about your purchase"));
+			debug_log( getLocalizedLogString(getSystemOrDefaultLocale(), "map") + PlayersMap.toString() );
+			debug_log( getLocalizedLogString(getSystemOrDefaultLocale(), "message_when_getting") + e.getMessage(), 3 );
+			if(player.isOnline()) player.sendMessage(getLocalizedGeneralText(player.locale(), "speak_with_admin"));
 		}
 
 		// Default to false, worst case they have to run this twice.

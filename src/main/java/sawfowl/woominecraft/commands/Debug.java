@@ -8,8 +8,6 @@ import org.spongepowered.api.command.parameter.CommandContext;
 import com.plugish.woominecraft.WooMinecraft;
 
 import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 
 public class Debug extends AbstractCommand {
 
@@ -20,7 +18,7 @@ public class Debug extends AbstractCommand {
 	@Override
 	public void execute(CommandContext context, Audience audience, Locale locale) {
 		plugin.getConfig().setDebug(!plugin.getConfig().isDebug());
-		audience.sendMessage(chatPrefix.append(Component.text("Set debug to: ").append(Component.text(plugin.getConfig().isDebug()).color(plugin.getConfig().isDebug() ? NamedTextColor.GREEN : NamedTextColor.RED))));
+		audience.sendMessage(plugin.getLocalizedGeneralText(locale, plugin.getConfig().isDebug() ? "enable_debug" : "disable_debug"));
 	}
 
 	@Override

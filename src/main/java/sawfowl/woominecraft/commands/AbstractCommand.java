@@ -30,7 +30,7 @@ public abstract class AbstractCommand implements CommandExecutor {
 
 	@Override
 	public CommandResult execute(CommandContext context) throws CommandException {
-		if(!plugin.isEnable()) throw new CommandException(toText("&cWooMinecraft doesn't support offline mode"));
+		if(!plugin.isEnable()) throw new CommandException(chatPrefix.append(plugin.getLocalizedGeneralText(getLocale(context.cause()), "offline_mode_not_support")));
 		execute(context, context.cause().audience(), getLocale(context.cause()));
 		return CommandResult.success();
 	}
@@ -53,6 +53,10 @@ public abstract class AbstractCommand implements CommandExecutor {
 
 	protected Component toText(String string) {
 		return LegacyComponentSerializer.legacyAmpersand().deserialize(string);
+	}
+
+	protected Component toText(Object object) {
+		return toText(object.toString());
 	}
 
 	public abstract void execute(CommandContext context, Audience audience, Locale locale) throws CommandException ;

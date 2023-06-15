@@ -38,21 +38,21 @@ public class Ping extends AbstractCommand {
 					String rs = ping.getResponseMessage();
 					ping.disconnect();
 					if (Rc < 199) {
-						audience.sendMessage(chatPrefix.append(toText("&eStatus: Ok, but possible issues, " + Rc + " " + rs)));
+						audience.sendMessage(chatPrefix.append(plugin.getLocalizedGeneralText(locale, "check_issues").append(toText(Rc + " ")).append(toText(rs))));
 					} else if (Rc >= 200 && Rc <= 299) {
-						audience.sendMessage(chatPrefix.append(toText("&aStatus: Good, "+ Rc)));
+						audience.sendMessage(chatPrefix.append(plugin.getLocalizedGeneralText(locale, "check_good").append(toText(Rc))));
 					} else if (Rc >=300 && Rc <= 399) {
-						audience.sendMessage(chatPrefix.append(toText("&eStatus: Ok, but possible issues, " + Rc + " " + rs)));
+						audience.sendMessage(chatPrefix.append(plugin.getLocalizedGeneralText(locale, "check_issues").append(toText(Rc + " ")).append(toText(rs))));
 					} else if ( Rc >= 400 && Rc <=599) {
-						audience.sendMessage(chatPrefix.append(toText("&4Status: Bad, "+ Rc+" "+rs)));
+						audience.sendMessage(chatPrefix.append(plugin.getLocalizedGeneralText(locale, "check_bad").append(toText(Rc + " ")).append(toText(rs))));
 					}
 				} catch (IOException e) {
-					audience.sendMessage(chatPrefix.append(toText("&4Server Status: Failed")));
+					audience.sendMessage(chatPrefix.append(plugin.getLocalizedGeneralText(locale, "check_fail")));
 				}
 
 			} else {
 				try {
-					audience.sendMessage(chatPrefix.append(toText("Checking connection to server")));
+					audience.sendMessage(chatPrefix.append(plugin.getLocalizedGeneralText(locale, "check_server")));
 					HttpURLConnection ping = (HttpURLConnection) new URL(plugin.getConfig().getUrl()).openConnection();
 					ping.setConnectTimeout(700);
 					ping.setReadTimeout(700);
@@ -61,25 +61,25 @@ public class Ping extends AbstractCommand {
 					String rs = ping.getResponseMessage();
 					ping.disconnect();
 					if (Rc < 199) {
-						audience.sendMessage(chatPrefix.append(toText("&eStatus: Ok, but possible issues, " + Rc + " " + rs)));
+						audience.sendMessage(chatPrefix.append(plugin.getLocalizedGeneralText(locale, "check_issues").append(toText(Rc + " ")).append(toText(rs))));
 					} else if (Rc >= 200 && Rc <= 299) {
-						audience.sendMessage(chatPrefix.append(toText("&aStatus: Good, "+ Rc)));
+						audience.sendMessage(chatPrefix.append(plugin.getLocalizedGeneralText(locale, "check_good").append(toText(Rc))));
 					} else if (Rc >= 300 && Rc <= 399) {
-						audience.sendMessage(chatPrefix.append(toText("&eStatus: Ok, but possible issues, " + Rc + " " + rs)));
+						audience.sendMessage(chatPrefix.append(plugin.getLocalizedGeneralText(locale, "check_issues").append(toText(Rc + " ")).append(toText(rs))));
 					} else if (Rc >= 400 && Rc <= 599) {
-						audience.sendMessage(chatPrefix.append(toText("&4Status: Bad, "+ Rc+" "+rs)));
+						audience.sendMessage(chatPrefix.append(plugin.getLocalizedGeneralText(locale, "check_bad").append(toText(Rc + " ")).append(toText(rs))));
 					}
 				} catch (IOException e) {
 					// send feedback for the sender
 					plugin.getLogger().error(e.getMessage());
-					audience.sendMessage(chatPrefix.append(toText("&4Server Status: Failed")));
+					audience.sendMessage(chatPrefix.append(plugin.getLocalizedGeneralText(locale, "check_fail")));
 					if (plugin.isDebug()) {
 						plugin.getLogger().info(plugin.getConfig().getKey());
 						plugin.getLogger().info(plugin.getConfig().getUrl());
 					}
 				}
 				try {
-					audience.sendMessage(chatPrefix.append(toText("Checking Rest Api Url")));
+					audience.sendMessage(chatPrefix.append(plugin.getLocalizedGeneralText(locale, "check_rest")));
 					HttpURLConnection ping = (HttpURLConnection) plugin.getSiteURL().openConnection();
 					ping.setConnectTimeout(700);
 					ping.setReadTimeout(700);
@@ -88,17 +88,17 @@ public class Ping extends AbstractCommand {
 					String rs = ping.getResponseMessage();
 					ping.disconnect();
 					if (Rc < 199) {
-						audience.sendMessage(chatPrefix.append(toText("&eStatus: Ok, but possible issues, " + Rc + " " + rs)));
+						audience.sendMessage(chatPrefix.append(plugin.getLocalizedGeneralText(locale, "check_issues").append(toText(Rc + " ")).append(toText(rs))));
 					} else if (Rc >= 200 && Rc <= 299) {
-						audience.sendMessage(chatPrefix.append(toText("&aStatus: Good, "+ Rc)));
+						audience.sendMessage(chatPrefix.append(plugin.getLocalizedGeneralText(locale, "check_good").append(toText(Rc))));
 					} else if (Rc >= 300 && Rc <= 399) {
-						audience.sendMessage(chatPrefix.append(toText("&eStatus: Ok, but possible issues, " + Rc + " " + rs)));
+						audience.sendMessage(chatPrefix.append(plugin.getLocalizedGeneralText(locale, "check_issues").append(toText(Rc + " ")).append(toText(rs))));
 					} else if (Rc >= 400 && Rc <= 599) {
-						audience.sendMessage(chatPrefix.append(toText("&4Status: Bad, "+ Rc+" "+rs)));
+						audience.sendMessage(chatPrefix.append(plugin.getLocalizedGeneralText(locale, "check_bad").append(toText(Rc + " ")).append(toText(rs))));
 					}
 				} catch (IOException e) {
 					plugin.getLogger().error(e.getMessage());
-					audience.sendMessage(chatPrefix.append(toText("&4Server Status: Failed")));
+					audience.sendMessage(chatPrefix.append(plugin.getLocalizedGeneralText(locale, "check_fail")));
 					if (plugin.isDebug()) {
 						plugin.getLogger().info(plugin.getConfig().getKey());
 						plugin.getLogger().info(plugin.getConfig().getUrl());

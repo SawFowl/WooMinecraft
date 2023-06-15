@@ -18,15 +18,17 @@ public class Woo extends AbstractCommand {
 	@Override
 	public void execute(CommandContext context, Audience audience, Locale locale) {
 		audience.sendMessage(getTextWhithPrefix(locale, "general", "avail_commands"));
+		audience.sendMessage(getTextWhithPrefix(locale, "general", "command_check"));
+		audience.sendMessage(getTextWhithPrefix(locale, "general", "command_ping"));
+		audience.sendMessage(getTextWhithPrefix(locale, "general", "command_debug"));
 	}
 
 	@Override
 	public Parameterized build() {
 		return builder()
 				.addChild(new Check(plugin).build(), "check")
-				.addChild(new Debug(plugin).build(), "debug")
-				.addChild(new Help(plugin).build(), "help")
 				.addChild(new Ping(plugin).build(), "ping")
+				.addChild(new Debug(plugin).build(), "debug")
 				.build();
 	}
 

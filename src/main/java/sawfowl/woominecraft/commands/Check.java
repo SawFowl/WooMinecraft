@@ -31,7 +31,7 @@ public class Check extends AbstractCommand {
 				}
 			} catch (Exception e) {
 				// send feedback for the sender
-				if(e.getMessage().contains( "Expected BEGIN_OBJECT but was STRING" )) audience.sendMessage(chatPrefix.append(Component.text("REST endpoint is not accessible, check logs.").color(NamedTextColor.RED)).hoverEvent(HoverEvent.showText(Component.text(e.getLocalizedMessage()).color(NamedTextColor.RED))));
+				if(e.getMessage().contains( "Expected BEGIN_OBJECT but was STRING" )) audience.sendMessage(chatPrefix.append(plugin.getLocalizedGeneralText(locale, "rest_error")).hoverEvent(HoverEvent.showText(Component.text(e.getLocalizedMessage()).color(NamedTextColor.RED))));
 				e.printStackTrace();
 			}
 		});
