@@ -54,6 +54,11 @@ sponge {
 		contributor("Jerry Wood") {
 			description("Author")
 		}
+		links {
+			homepage("https://discord.gg/7xnZGSYJH9")
+			source("https://github.com/SawFowl/WooMinecraft")
+			issues("https://discord.gg/7xnZGSYJH9")
+		}
 		dependency("spongeapi") {
 			optional(false)
 			loadOrder("after")

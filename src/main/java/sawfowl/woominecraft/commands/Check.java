@@ -25,9 +25,9 @@ public class Check extends AbstractCommand {
 		Sponge.asyncScheduler().executor(getContainer()).execute(() -> {
 			try {
 				if (plugin.check()) {
-					audience.sendMessage(getTextWhithPrefix(locale, "general" + "processed"));
+					audience.sendMessage(getTextWhithPrefix(locale, "general", "processed"));
 				} else {
-					audience.sendMessage(getTextWhithPrefix(locale, "general" + "none_avail"));
+					audience.sendMessage(getTextWhithPrefix(locale, "general", "none_avail"));
 				}
 			} catch (Exception e) {
 				// send feedback for the sender

@@ -11,9 +11,9 @@ public class WhitelistWorlds {
 
 	public WhitelistWorlds(){}
 
-	@Setting("enable")
+	@Setting("Enable")
 	private boolean enable = false;
-	@Setting("list")
+	@Setting("List")
 	private List<String> list = Arrays.asList("minecraft:overworld");
 
 	public boolean isEnable() {

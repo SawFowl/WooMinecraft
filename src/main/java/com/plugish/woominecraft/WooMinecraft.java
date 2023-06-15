@@ -55,10 +55,9 @@ import org.spongepowered.api.plugin.PluginManager;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
+import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 import org.spongepowered.configurate.reference.ConfigurationReference;
 import org.spongepowered.configurate.reference.ValueReference;
-import org.spongepowered.configurate.yaml.NodeStyle;
-import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 import org.spongepowered.plugin.PluginContainer;
 import org.spongepowered.plugin.builtin.jvm.Plugin;
 
@@ -145,9 +144,9 @@ public final class WooMinecraft {
 			enable = false;
 			return;
 		}
-		configurationReference = YamlConfigurationLoader.builder().nodeStyle(NodeStyle.BLOCK).defaultOptions(localeService.getConfigurationOptions()).path(configDir.resolve("Config.yml")).build().loadToReference();
+		configurationReference = HoconConfigurationLoader.builder().defaultOptions(localeService.getConfigurationOptions()).path(configDir.resolve("Config.conf")).build().loadToReference();
 		this.config = configurationReference.referenceTo(Config.class);
-		if(!configDir.resolve("Config.yml").toFile().exists()) configurationReference.save();
+		if(!configDir.resolve("Config.conf").toFile().exists()) configurationReference.save();
 		localeService.saveAssetLocales("woominecraft");
 
 		// Log when plugin is initialized.
@@ -471,7 +470,7 @@ public final class WooMinecraft {
 		debug_log( getLocalizedLogString(getSystemOrDefaultLocale(), "not_in_the_key_set") + NL + PlayersMap.toString() );
 
 		try {
-			URL mojangUrl = new URL("https://api.mojang.com/users/profiles/minecraft/" +  playerName);
+			URL mojangUrl = new URL(getConfig().getMojangURL() +  playerName);
 			InputStream inputStream = mojangUrl.openStream();
 			@SuppressWarnings("resource")
 			Scanner scanner = new Scanner(inputStream);
