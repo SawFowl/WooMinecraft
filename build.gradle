@@ -47,7 +47,7 @@ sponge {
 		displayName(project.name.capitalize())
 		version("${project.version}")
 		entrypoint("${project.group}.${rootProject.name}")
-		description("WooMinecraft")
+		description("Self-hosted Minecraft Donations")
 		contributor("SawFowl") {
 			description("Fork Developer")
 		}
