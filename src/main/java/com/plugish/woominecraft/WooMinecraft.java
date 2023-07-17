@@ -17,6 +17,7 @@ import com.plugish.woominecraft.pojo.WMCPojo;
 import com.plugish.woominecraft.pojo.WMCProcessedOrders;
 
 import net.kyori.adventure.text.Component;
+
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -44,10 +45,13 @@ import org.apache.logging.log4j.Logger;
 
 import org.spongepowered.api.Server;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.command.exception.CommandException;
 import org.spongepowered.api.command.Command.Parameterized;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
+import org.spongepowered.api.event.EventContextKeys;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.CauseStackManager.StackFrame;
 import org.spongepowered.api.event.lifecycle.RegisterCommandEvent;
 import org.spongepowered.api.event.lifecycle.StartedEngineEvent;
 import org.spongepowered.api.event.lifecycle.StoppedGameEvent;
@@ -269,18 +273,23 @@ public final class WooMinecraft {
 				}
 			}
 
-			// Walk over all commands and run them at the next available tick.
-			for ( String command : order.getCommands() ) {
-				//Auth player against Mojang api
-				if ( ! isPaidUser( player ) ) {
-					debug_log( getLocalizedLogString(getSystemOrDefaultLocale(), "not_paid_user ").replace("%user%", player.name()) );
-					return false;
-				}
-
-				Sponge.server().scheduler().executor(pluginContainer).execute(() -> {
-					Sponge.server().commandManager().complete(command);
-				});
+			if ( ! isPaidUser( player ) ) {
+				debug_log( getLocalizedLogString(getSystemOrDefaultLocale(), "not_paid_user ").replace("%user%", player.name()) );
+				return false;
 			}
+			// Walk over all commands and run them at the next available tick.
+			//Auth player against Mojang api
+			Sponge.server().scheduler().executor(pluginContainer).execute(() -> {
+				try(StackFrame frame = Sponge.server().causeStackManager().pushCauseFrame()) {
+					frame.addContext(EventContextKeys.SUBJECT, Sponge.systemSubject());
+					frame.pushCause(Sponge.server());
+					for ( String command : order.getCommands() ) {
+						Sponge.server().commandManager().process(Sponge.systemSubject(), Sponge.systemSubject(), command);
+					}
+				} catch (CommandException e) {
+					Sponge.systemSubject().sendMessage(e.componentMessage());
+				}
+			});
 
 			debug_log( getLocalizedLogString(getSystemOrDefaultLocale(), "add_item") + order.getOrderId() );
 			processedOrders.add( order.getOrderId() );
@@ -446,7 +455,7 @@ public final class WooMinecraft {
 
 		// Check if server is in online mode.
 		if (onlineMode) {
-			wmc_log( getLocalizedLogString(getSystemOrDefaultLocale(), "online_mode"), 3 );
+			wmc_log( getLocalizedLogString(getSystemOrDefaultLocale(), "online_mode"), 1 );
 			return true;
 		}
 

@@ -5,44 +5,46 @@ WordPress side of things, we allow you to specify commands for product variation
 ![WooMinecraft Logo](https://raw.githubusercontent.com/WooMinecraft/WooMinecraft/main/src/main/resources/wmc-logo.jpg)
 
 ### WooMinecraft for Sponge servers. API 8+
-####  ***[LocaleAPI](https://ore.spongepowered.org/Semenkovsky_Ivan/LocaleAPI) - required.***
 
 ## Config
 Your config should look like the below section.
-```hocon
-# Set to true in order to toggle debug information
-Debug=false
-# This must match the WordPress key in your admin panel for WooMinecraft
-# This is a key that YOU set, both needing to be identical in the admin panel
-# and in this config file
-# For security purposes, you MUST NOT leave this empty.
-Key=""
-MojangURL="https://api.mojang.com/users/profiles/minecraft/"
+```
+# This is how often, in seconds, the server will contact your WordPress installation
+# to see if there are donations that need made.
+update_interval: 1500
+
+# You must set this to your WordPress site URL.  If you installed WordPress in a
+# subdirectory, it should point there.
+url: "http://playground.dev"
+
 # If you are having issues with REST, or have disabled pretty permalinks. Set this to false.
 # Doing so will use the old /index.php?rest_route=/wmc/v1/server/ base
 # Setting this to false will also allow you to set the restBasePath value if you have altered your
 # installation in any way.
-PrettyPermalinks=true
-# If your REST API has a custom path base, input it here.
+prettyPermalinks: true
+
+# If your REST API has a custom path base, input it here. 
 # NOTE: This is only loaded if prettyPermalinks is set to false.
 # Known good URL bases.
 # - /wp-json/wmc/v1/server/
 # - /index.php?rest_route=/wmc/v1/server/
-RestBasePath=""
-# You must set this to your WordPress site URL.  If you installed WordPress in a
-# subdirectory, it should point there.
-URL="http://playground.dev"
-# This is how often, in seconds, the server will contact your WordPress installation
-# to see if there are donations that need made.
-UpdateInterval=1500
+restBasePath: ""
+
+# This must match the WordPress key in your admin panel for WooMinecraft
+# This is a key that YOU set, both needing to be identical in the admin panel
+# and in this config file
+# For security purposes, you MUST NOT leave this empty.
+key: ""
+
 # Allowed worlds the player needs to be in to run the commands.
 # Disabled by default!
-WhitelistWorlds {
-    Enable=false
-    List=[
-        "minecraft:overworld"
-    ]
-}
+whitelist-worlds:
+    enable: false
+    list:
+    - minecraft:overworld
+
+# Set to true in order to toggle debug information
+debug: false
 ```
 
 ## How does it work?
@@ -68,16 +70,6 @@ Since this plugin is GPL and entirely opensource, we cannot be sure how you will
 You'll need the WordPress plugin for this MC Plugin to work - you can [get it here](https://github.com/WooMinecraft/woominecraft-wp).
 
 ## Changelog
-
-## 1.4.7
-* Changed the type of the main config of the plugin to HOCON.
-* A link for interacting with the Mojang API has been added to the configuration. This is designed so that you can specify a different link in case of any changes from Mojang's side.
-
-## 1.4.6
-* Migration to SpongeAPI.
-* Addition of localizations.
-* Now you can use all localizations at the same time.
-* Added Russian localization.
 
 ## 1.4.5
 * Hotfix for [274](https://github.com/WooMinecraft/WooMinecraft/issues/274)
